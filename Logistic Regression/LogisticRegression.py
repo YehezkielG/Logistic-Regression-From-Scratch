@@ -3,9 +3,10 @@ import numpy as np
 # z = wx_1 + wx_2 + ... wx_n + w0 
 # prediction  = 1/1(1 + e^-z)
 class Model():
-    def __init__(self, learning_rate=0.01):
+    def __init__(self, learning_rate=0.01,epoch=0):
         self.intercept_ = None
         self.coef_ = None
+        self.epoch = epoch
         self.learningRate = learning_rate
 
     def GradientDescent(self,y_hat,y,X_features):
@@ -28,12 +29,16 @@ class Model():
         tol = 1e-8
         prev_cost = float('inf');
         cost = 1
-        while abs(prev_cost-cost) > tol:
+        iteration = 0
+        while iteration <= self.epoch if self.epoch else abs(prev_cost-cost) > tol:
             prev_cost = cost
             predicts = self.predict_proba(X_features)
             cost = self.compute_loss(predicts,y_target)
             self.GradientDescent(predicts, y_target, X_features)
-    
+            iteration += 1;
+            
+        return cost
+        
     def compute_loss(self,y_hat, y):
         m = y.shape[0]  
         epsilon = 1e-9 
