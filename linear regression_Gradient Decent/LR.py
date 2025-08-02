@@ -24,7 +24,6 @@ class Model():
     
     def gradient_decent(self,X:np.ndarray,y:np.ndarray,y_hat):
         m = X.shape[1]
-        # deriv = 1/m * np.dot(X.T, (y_hat-y))
         dw = (1/m) * np.dot(X.T, (y_hat - y))
         db = (1/m) * np.sum(y_hat - y)
         self.weight -= self.learning_rate * dw

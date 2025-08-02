@@ -9,10 +9,10 @@ class Model():
         self.epoch = epoch
         self.learningRate = learning_rate
 
-    def GradientDescent(self,y_hat,y,X_features):
+    def GradientDescent(self,y_hat,y,X):
         m = y.shape[0]
-        dw = (1/m) * np.dot(X_features.T, (y_hat - y))
-        db = (1/m) * np.sum(y_hat - y)        
+        dw = (1/m) * np.dot(X.T, (y_hat - y))
+        db = (1/m) * np.sum(y_hat - y)    
         self.coef_ = self.coef_ - self.learningRate * dw
         self.intercept_ = self.intercept_ - self.learningRate * db
 
@@ -23,20 +23,19 @@ class Model():
         z = np.dot(X, self.coef_) + self.intercept_        
         return 1 / (1 + np.exp(-z))
     
-    def fit(self, X_features, y_target):
+    def fit(self, X, y):
         self.intercept_ = [0] 
-        self.coef_ = np.array([0] * X_features.shape[1])
+        self.coef_ = np.array([0] * X.shape[1])
         tol = 1e-8
         prev_cost = float('inf');
         cost = 1
         iteration = 0
         while iteration <= self.epoch if self.epoch else abs(prev_cost-cost) > tol:
             prev_cost = cost
-            predicts = self.predict_proba(X_features)
-            cost = self.compute_loss(predicts,y_target)
-            self.GradientDescent(predicts, y_target, X_features)
+            predicts = self.predict_proba(X)
+            cost = self.compute_loss(predicts,y)
+            self.GradientDescent(predicts, y, X)
             iteration += 1;
-            
         return cost
         
     def compute_loss(self,y_hat, y):

@@ -21,19 +21,10 @@ class Model():
         """
         # --- Using the Normal Equation formula: w = (Xᵀ * X)⁻¹ * Xᵀ * y ---
         X_with_bias = np.insert(X_features, 0, 1, axis=1)
-        # 2. Transpose the X matrix.
         X_transpose = X_with_bias.T
-        # 3. Calculate (Xᵀ * X)
-        X_transpose_X = X_transpose @ X_with_bias # '@' is the matrix multiplication operator
-        # 4. Calculate the inverse of (Xᵀ * X).
-        X_transpose_X_inv = np.linalg.inv(X_transpose_X)
-        # 5. Calculate (Xᵀ * y)
-        X_transpose_y = X_transpose @ y_target
-        # 6. Calculate the total weights (including bias).
-        all_weights = X_transpose_X_inv @ X_transpose_y
-        # 7. Separate the bias (the first element) and the feature weights (the rest).
-        self.intercept_ = all_weights[0]
-        self.coef_ = all_weights[1:]
+        weights = np.linalg.inv(X_transpose @ X_with_bias) @ X_transpose @ y_target
+        self.intercept_ = weights[0]
+        self.coef_ = weights[1:]
         # Returning all weights can be useful for debugging
     
     def predict(self, X_new):
