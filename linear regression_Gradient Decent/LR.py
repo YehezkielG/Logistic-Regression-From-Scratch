@@ -7,11 +7,12 @@ class Model():
         self.epoch = epoch
         self.tol = tol
         self.bias = 0
+        self.m = 0
         pass
     
     def fit(self, X, y):
-        m = X.shape[1]
-        self.weight = np.random.uniform(-0.01, 0.01, size=m)
+        self.m = X.shape[1];
+        self.weight = np.random.uniform(-0.01, 0.01, size=self.m)
         prev_cost = float('inf');
         cost = 1
         iteration = 1
@@ -23,9 +24,8 @@ class Model():
             iteration += 1;
     
     def gradient_decent(self,X:np.ndarray,y:np.ndarray,y_hat):
-        m = X.shape[1]
-        dw = (1/m) * np.dot(X.T, (y_hat - y))
-        db = (1/m) * np.sum(y_hat - y)
+        dw = (1/self.m) * np.dot(X.T, (y_hat - y))
+        db = (1/self.m) * np.sum(y_hat - y)
         self.weight -= self.learning_rate * dw
         self.bias -= self.learning_rate * db
     
@@ -33,5 +33,4 @@ class Model():
         return np.dot(X, self.weight) + self.bias
     
     def lost_func(self,X:np.ndarray, y:np.ndarray,y_hat):
-        m = X.shape[1]
-        return 1/m * (np.sum(y_hat - y)**2)
+        return 1/self.m * (np.sum(y_hat - y)**2)
